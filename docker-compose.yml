@@ -55,6 +55,17 @@ services:
      - "mongo3_data:/data/db"
      - "mongo3_config:/data/configdb"
 
+
+  nginx:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      -80:80
+    dependes_on:
+      -frontend1
+      -frontend2
+
 volumes:
   mongo1_data:
   mongo1_config:  

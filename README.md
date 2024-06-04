@@ -1,2 +1,1 @@
 # PARALLELEN
-# Eros du lutscher

@@ -1,3 +1,1 @@
 # PARALLELEN
-
-//Eros du gay

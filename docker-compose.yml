@@ -3,11 +3,12 @@ services:
   stock-publisher:
     image: kiko46/stock-publisher
     environment:
-      - RABBITMQ_URL=amqp://rabbitmq:5672
+      - RABBITMQ_URL=amqp://stockmarket:supersecret123@rabbitmq:5672/
     depends_on:
       - rabbitmq
     networks:
-      - app-network      
+      - app-network
+    command: sh -c "sleep 20 && ./stock-publisher"           
 
   rabbitmq:
     image: rabbitmq:3-management
@@ -17,6 +18,8 @@ services:
     environment:
       RABBITMQ_DEFAULT_USER: stockmarket
       RABBITMQ_DEFAULT_PASS: supersecret123
+    networks:
+      - app-network      
   # Konfiguration für die MongoDB mit Replikation.
   mongo1:
     image: mongo:7.0
@@ -95,9 +98,14 @@ services:
       - rabbitmq
       - mongo1
     environment:
-      - RABBITMQ_URL=amqp://stockmarket:supersecret123@rabbitmq:5672
-      - QUEUE_NAME=some-queue
-      - MONGO_URL=mongodb://root:example@mongo1:27017,mongo2:27018,mongo3:27019/stockmarket?authSource=admin&replicaSet=rs0
+      - RABBITMQ_URL=amqp://stockmarket:supersecret123@rabbitmq:5672/
+      - MONGO_URL=mongodb://mongo1:27017,mongo2:27018,mongo3:27019/?replicaSet=rs0
+      - MONGODB_DB=stockmarket
+      - MONGODB_COLLECTION=stocks
+      - QUEUE_NAMES=MSFT,TSLA,AAPL
+    networks:
+      - app-network
+    command: sh -c "sleep 60 && ./consumer"        
 
   nginx:
     image: nginx:latest

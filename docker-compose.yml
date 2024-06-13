@@ -68,18 +68,18 @@ services:
     ports:
       - "3001:3000"
 
-  # stock-liveview2:
-  #   image: kiko46/stock-liveview
-  #   depends_on:
-  #     - mongo1
-  #   environment:
-  #     - MONGODB_URL=mongodb://mongo1:27017,mongo2:27018,mongo3:27019/?replicaSet=rs0
-  #     - MONGODB_DB=stockmarket
-  #     - MONGODB_COLLECTION=stocks
-  #     - NODE_ENV=production
-  #     - PORT=3000
-  #   ports:
-  #     - "3002:3000"
+  stock-liveview2:
+    image: kiko46/stock-liveview
+    depends_on:
+      - mongo1
+    environment:
+      - MONGODB_URL=mongodb://mongo1:27017,mongo2:27018,mongo3:27019/?replicaSet=rs0
+      - MONGODB_DB=stockmarket
+      - MONGODB_COLLECTION=stocks
+      - NODE_ENV=production
+      - PORT=3000
+    ports:
+      - "3002:3000"
   
   # consumer:
   #   image: kiko46/consumer
@@ -91,15 +91,15 @@ services:
   #     - QUEUE_NAME=some-queue
   #     - MONGO_URL=mongodb://root:example@mongo1:27017,mongo2:27018,mongo3:27019/stockmarket?authSource=admin&replicaSet=rs0
 
-  # nginx:
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     -80:80
-  #   dependes_on:
-  #     -frontend1
-  #     -frontend2
+  nginx:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      -80:80
+    dependes_on:
+      -stock-liveview1
+      -stock-liveview2
 
 volumes:
   mongo1_data:

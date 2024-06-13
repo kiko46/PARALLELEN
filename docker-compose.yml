@@ -89,15 +89,15 @@ services:
     networks:
       - app-network
   
-  # consumer:
-  #   image: kiko46/consumer
-  #   depends_on:
-  #     - rabbitmq
-  #     - mongo1
-  #   environment:
-  #     - RABBITMQ_URL=amqp://user:password@rabbitmq:5672
-  #     - QUEUE_NAME=some-queue
-  #     - MONGO_URL=mongodb://root:example@mongo1:27017,mongo2:27018,mongo3:27019/stockmarket?authSource=admin&replicaSet=rs0
+  consumer:
+    image: kiko46/consumer
+    depends_on:
+      - rabbitmq
+      - mongo1
+    environment:
+      - RABBITMQ_URL=amqp://stockmarket:supersecret123@rabbitmq:5672
+      - QUEUE_NAME=some-queue
+      - MONGO_URL=mongodb://root:example@mongo1:27017,mongo2:27018,mongo3:27019/stockmarket?authSource=admin&replicaSet=rs0
 
   nginx:
     image: nginx:latest

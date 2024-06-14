@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"log"
+	"math"
 	"os"
 	"strings"
 
@@ -76,8 +77,9 @@ func consumeQueue(queueName string, ch *amqp.Channel, collection *mongo.Collecti
 				total += price
 			}
 			avgPrice := total / float64(len(prices))
+			roundedAvgPrice := math.Round(avgPrice)
 			filter := bson.M{"company": stock.Company}
-			update := bson.M{"$set": bson.M{"company": stock.Company, "avgPrice": avgPrice}}
+			update := bson.M{"$set": bson.M{"company": stock.Company, "avgPrice": roundedAvgPrice}}
 			_, err := collection.UpdateOne(context.Background(), filter, update, options.Update().SetUpsert(true))
 			if err != nil {
 				log.Printf("Failed to update MongoDB: %v", err)

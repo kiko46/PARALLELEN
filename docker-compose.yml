@@ -108,7 +108,7 @@ services:
     command: sh -c "sleep 60 && ./consumer"        
 
   nginx:
-    image: nginx:latest
+    image: kiko46/nginx
     ports:
       - "3000:80"
     depends_on:
